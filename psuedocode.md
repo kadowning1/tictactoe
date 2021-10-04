@@ -22,6 +22,21 @@ l
 Tile information - What data does it hold?
 - beenClicked
 
+###### Requirements
+- To complete the assignment, you must complete the following:
+
+1. The HTML for the tic-tac-toe grid should be dynamically rendered in JS.
+2. Your code should incorporate the use of at least one Class (For most design patterns, you typically use more than one class at a time. For example, in the Composite design pattern, you would need to create at least one Parent class and one Child class)
+3. The entire project must be Object Oriented and should at least use one of the following design patterns (any additional design patterns are up to you, including State, Singleton, and more [see Additional Resources at the bottom of the page])
+Model View Controller
+Composite
+4. The game should let the players know who's turn it is.
+5. Game tiles should only be clickable once after they have been clicked, and if the game is over they should not be clickable at all.
+6. The game should display who wins the game if someone wins, otherwise say that the game resulted in a tie.
+7. There should be a Restart Game button that does not refresh the page (set state).
+8. During Demo, you should be able to explain what pilars of OOP you used (see Additional Resources), as well as what specific design patterns you incorporated, how you did so, and where they appear in the code.
+
+
 ### Morning Session 10/4
 
 - Used to run top to bottom with init function
@@ -151,7 +166,8 @@ class Controller {
 ```
 class View {
     constructor(){
-
+        win condition
+        clicks
     }
     init(){
         set up event listener
@@ -179,4 +195,92 @@ function runUnitTest1(){
 
 - update view for the user
 END
+
+
+### Afternoon Session 10/4
+
+- Generating HTML in Javascript
+
+- div id='app'
+
+- Procedural rendering
+- Dynamic rendering - can change on the fly
+
+- Entirely all View code
+
+### Psuedocode Process
+
+Model
+- Board
+- Tile
+- Array
+View
+- Update DOM
+Controller
+- 
+
+### Psuedocode Session with Ian 10/4
+- Psuedocode of a Class
+- Use a couple of classes for this project
+
+- State be an object with multiple parameters
+
+- init function to restart game/state
+
+- put win conditions in global
+
+- use for loop to go through two indexs
+
+###### State/Model Logic
+- placement of x & o 
+- could be actual coordinates variables
+    - array
+    - empty array
+    - index array
+    - update array on state update
+
+    0 = nothing
+    1 = "x"
+    2 = "0"
+
+- need atleast 5 clicks to win to run check win function
+
+- number of turns = num = 0;
+    - checking if we should win
+    - whos turn it is? "x", "o" onclick
+    - game ended/tie
+
+```
+num = 0;
+if(num % 2 == 0){
+    it x turn
+}
+else {
+    its o turn
+}
+```
+
+- last person who entered value into array wins
+- restart game function
+    - boolean
+    - run init
+    - on click event
+###### View
+- generateHTML()
+- createGrid()
+- createBoard()
+    - container
+    - 3 rows
+    - 3 columns (col-4) ('div')
+- createTile()
+    - onTileClick()
+- show win()
+- show currentPlayer()
+- showScore()
+
+###### Controller
+- init function
+- check win function
+- restart method
+- onTileClick()
 
