@@ -208,7 +208,7 @@ END
 
 - Entirely all View code
 
-### Psuedocode Process
+#### Psuedocode Process
 
 Model
 - Board
@@ -221,6 +221,7 @@ Controller
 
 ### Psuedocode Session with Ian 10/4
 - Psuedocode of a Class
+
 - Use a couple of classes for this project
 
 - State be an object with multiple parameters
@@ -231,7 +232,7 @@ Controller
 
 - use for loop to go through two indexs
 
-###### State/Model Logic
+###### State/Model Logic Board - Parent
 - placement of x & o 
 - could be actual coordinates variables
     - array
@@ -266,7 +267,7 @@ else {
     - run init
     - on click event
 ###### View
-- generateHTML()
+- generateHTML() - could be global or passed down to children
 - createGrid()
 - createBoard()
     - container
@@ -283,4 +284,149 @@ else {
 - check win function
 - restart method
 - onTileClick()
+- updateClickArray
+    - checkTieorWinner
+    - showWinorTie
+        - else 
+    - showCurrentPlayer 
+        
+- updateCoordGrid 
 
+#### Tile Class/ - Child
+- M
+    - constructor
+    - store who clicked - empty string
+    - if it has been clicked
+        - true/false or whoclicked.length
+    - does not need to know win condition 
+- V
+    - storing methods
+    - create tile method
+    - could inherit the generateHTML method
+    - update view rendering X,O,""
+- C
+    - storing methods
+    - onClick
+        - decides who clicked
+    - runs view method
+    - runs method from parent
+
+
+### Trying to psuedocode
+
+1. Start
+
+- Create const to use one div to render page
+```
+const app = document.getElementById('app');
+```
+
+###### Model
+
+- Set state and maintain clicks
+    - tileArray = []
+    - numberClicks = 0
+- Tell view to update
+
+```
+class Model {
+    constructor()
+    {
+        this.currentPlayer = null
+        this.whosTurn = 0
+        this.gameOver = false
+        this.tieGame = false
+    }
+}
+```
+
+- determine whos turn it is
+
+```
+currentPlayer = 0/null;
+ playerTurn() {
+        if (this.currentPlayer % 2 === 'O') {
+            this.currentPlayer = 'O';
+        } else {
+            this.currentPlayer = 'X';
+        }
+```
+
+- Determine a win scenario
+    - greater than 5 clicks
+    - Board 3x3x3 [0,1,2,3,4,5,6,7,8]
+    - Ways to win [0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]
+    - win scenario = true
+
+- Determine a tie scenario
+    - greater than 5 clicks
+    - clicks equal to 9
+    - no win scenario reached = false
+    - do not allow more clicks
+
+###### View
+
+- Show UI
+
+- Create function to generateHTML - View
+    - element
+    - id
+    - class
+    - text?
+```
+function generateHTML({ type, class, text = '', href = '', parent = null})
+    let element = document.getElement(type)
+    element.className = classes
+    element.innerText = text
+    if (href.length > 0) {
+        element.href = href
+    }
+
+    if (parent) {
+        parent.appendChild(element)
+    }
+    return element
+}
+```
+
+- Create function to createBoard and generate html from above function
+    - Create gameboard with nested for loops through generateHTML function
+
+```
+for (i=0; i < 3, i++) {
+    build row generateHTML
+    for(j=0; j < 3, j++)
+    build columns generateHTML
+}
+```
+
+###### Controller
+
+function init (){
+    let m = new Model();
+        - create array
+        - clear board
+    m.init();
+    let v = new View();
+        - create new rows
+        - create new columns
+    v.init();
+}
+
+function runUnitTest1(){
+    let m = new Model();
+    let v = new View();
+    m.init();
+    m.setState(5);
+    }
+
+- Create onclick events to add startGame - update state
+    - Create startGame function - init function
+
+- Create function to restart game and init board
+    - create button in HTML
+    - innerText = Reset Button
+    - event Listener on click to reset and alert new game
+        - new Model and View
+
+2. End
