@@ -1,16 +1,14 @@
 class Model {
-    constructor(){
-        this.currentPlayer
-    }
-    init(){
-        console.log("Model.init()")
-        this.currentPlayer = 0
-    }
-    setState(){
-        
-    }
+    constructor(currentPlayer, author){
+        this.currentPlayer = currentPlayer;
+        this.author = author
+   
+    
+}
 }
 
+const book1 = new Model("George", "Jim Joe");
+console.log(book1)
 class View {
 
 }
@@ -26,6 +24,6 @@ class App {
     }
 
 init (){
-    this.c.init();
+    this.App.constructor();
 }
 }

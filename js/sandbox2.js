@@ -1,10 +1,10 @@
 class Model {
-    constructor(currentPlayer){
-        this.currentPlayer = currentPlayer
+    constructor(numberClicks){
+        this.numberClicks = this.numberClicks
     }
     init(){
         console.log("Model.init()")
-        this.currentPlayer = 0
+        this.numberClicks = 0
     }
 }
 

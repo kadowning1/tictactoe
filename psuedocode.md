@@ -401,7 +401,7 @@ for (i=0; i < 3, i++) {
 ```
 
 ###### Controller
-
+```
 function init (){
     let m = new Model();
         - create array
@@ -412,14 +412,16 @@ function init (){
         - create new columns
     v.init();
 }
+```
 
+```
 function runUnitTest1(){
     let m = new Model();
     let v = new View();
     m.init();
     m.setState(5);
     }
-
+```
 - Create onclick events to add startGame - update state
     - Create startGame function - init function
 
