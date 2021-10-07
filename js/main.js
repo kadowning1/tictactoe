@@ -1,8 +1,8 @@
 // todo: thursday
 // get heading text to update/figure out player turn
 // update win conditions/tie conditions and display
-// makes tiles clickable once
-// get reset game button to work properly
+// makes tiles clickable once and not clickable if game is over
+// get reset game button to work properly - convert to singleton
 
 //---------Model----------//
 //create Model
@@ -26,20 +26,6 @@ class Model {
         this.beenClicked = 0;
         this.gameOver = false;
     }
-    playerTurn() { // need to solve this
-        let playerTurn = document.getElementById('playerTurn');
-        let firstPlayer = "X's Turn";
-        let secondPlayer = "O's Turn";
-        if (this.beenClicked == 0) {
-            playerTurn = firstPlayer
-        } else if (this.beenClicked > 8) {
-            playerTurn.innerText = "Game-Over, Reset Game"
-        } else if (this.beenClicked % 2 != 0) {
-            playerTurn = firstPlayer
-        } else if (this.beenClicked % 2 == 0) {
-            playerTurn = secondPlayer
-        }
-    }
 
     //let winConditions = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
     winConditions() { //need to solve this
@@ -47,8 +33,8 @@ class Model {
             let winArray = this.wins[index];
             console.log(winArray)
             let winOne = winArray[0];
-            console.log(winOne)
             let winTwo = winArray[1];
+            console.log(winTwo)
             let winThree = winArray[2];
             if (this.c.addClick(e)[winOne] == 'X' && this.c.addClick(e)[winTwo] == 'X' && this.c.addClick(e)[winThree] == 'X') {
                 this.gameOver = true
@@ -61,6 +47,7 @@ class Model {
         }
     }
 }
+
 
 // determine winScenario
 // determine tieScenario
@@ -89,7 +76,7 @@ class View {
         let container = this.generateHTML({ type: 'div', classes: 'container' })
         let rowBoard = this.generateHTML({ type: 'div', classes: 'row p-4' })
 
-        for (let index = 0; index < 9; index++) { // need to add some time of clickability through here
+        for (let index = 0; index < 9; index++) {
             //console.log(this)
             let columnBoard = this.generateHTML({
                 type: 'div',
@@ -100,7 +87,7 @@ class View {
             container.appendChild(rowBoard);
             app.appendChild(container);
         }
-        let resetDiv = this.generateHTML({type: 'div', classes: "text-center"})
+        let resetDiv = this.generateHTML({ type: 'div', classes: "text-center" })
         let resetButton = this.generateHTML({
             type: 'btn',
             classes: 'btn btn-outline-secondary text-center',
@@ -132,33 +119,61 @@ class Controller {
         this.m = model;
     }
     init() {
-        this.generateHTML()
+        this.v.generateHTML()
     }
+
+    /* notClicked(e){
+        if (e.target.id === true && this.m.gameOver === true)
+    } */
+    // if it has been clicked
+    // if game hasnt been over
 
     addClick(e) {
         console.log(e.target.id)
+        let player;
         if (this.m.turn % 2 == 0) {
             console.log('x clicked')
             e.target.innerText = "X";
+            player = 'X';
         } else {
             e.target.innerText = "O";
             console.log('o clicked')
-            //this.m.tileArray[index].element.innerText = "O";
+            player = 'O';
+
         }
         this.m.turn++;
         console.log(e);
         console.log('clicked on', e.target.id)
         //was clicked=true
-        this.m.winConditions();
+        //this.m.winConditions();
+        this.playerTurn(player);
     }
 
+    playerTurn(player) { // need to solve this
+        let playerTurn = document.getElementById('playerTurn');
+        let firstPlayer = "X's Turn";
+        let secondPlayer = "O's Turn";
+        if (player == 'X') {
+            playerTurn.innerText = secondPlayer;
+        }
+        else if (player == 'O') {
+            playerTurn.innerText = firstPlayer;
+        }
+        /* else (this.m.beenClicked > 8) {
+            playerTurn.innerText = "Game Over"
+        } */
+    }
     resetGame() {
+        //init(); // need to fix this
+        this.init;
+        this.v.generateHTML(htmlText = '');
         console.log('reseting game')
     }
 }
 //resetButton.addEventListener('click', view.init()) & model.init();
 
-//need to add a check win function
+//---------------App---------------//
+
 class App {
     constructor() {
         this.m = new Model();
@@ -171,8 +186,9 @@ class App {
     init() {
         console.log("starting the app");
         this.m.init();
-        // this.c.init();
         this.v.init();
+        this.c.init(); // figure out why this clears out
+
     }
 }
 function init() {
