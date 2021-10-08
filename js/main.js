@@ -1,22 +1,32 @@
-// todo: thursday
-// get heading text to update/figure out player turn
-// update win conditions/tie conditions and display
-// makes tiles clickable once and not clickable if game is over
-// get reset game button to work properly - convert to singleton
+// todo: friday
+
+//work on display
+//text at top is not flipping
+//beenClicked is not reseting after game is complete or reset button is clicks
+//game can be won at 9 clicks and not a tie
+
+
 
 //---------Model----------//
 //create Model
 class Model {
-    constructor(beenClicked, gameOver, turn, tileArray) {
+    constructor(beenClicked, gameOver, tileArray) {
         this.beenClicked = 0;
-        this.gameOver = false;
-        this.turn = 0;
-        this.board = [0, 0, 0,
-            0, 0, 0,
-            0, 0, 0];
+        this.gameOver = false; // possible switch to true so switched to false after first click
         this.tileArray = [];
+        this.firstPlayer = 'X';
+        this.secondPlayer = 'O';
         this.c = null;
-        this.wins = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+        this.wins = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
     }
     setController(controller) {
         this.c = controller;
@@ -27,25 +37,8 @@ class Model {
         this.gameOver = false;
     }
 
-    //let winConditions = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
-    winConditions() { //need to solve this
-        for (let index = 0; index < this.wins.length; index++) {
-            let winArray = this.wins[index];
-            console.log(winArray)
-            let winOne = winArray[0];
-            let winTwo = winArray[1];
-            console.log(winTwo)
-            let winThree = winArray[2];
-            if (this.c.addClick(e)[winOne] == 'X' && this.c.addClick(e)[winTwo] == 'X' && this.c.addClick(e)[winThree] == 'X') {
-                this.gameOver = true
-                playerTurn.innerText = 'X wins'
-            }
-            if (this.c.addClick(e)[winOne] == 'O' && this.c.addClick(e)[winTwo] == 'O' && this.c.addClick(e)[winThree] == 'O') {
-                this.gameOver = true
-                playerTurn.innerText = 'O wins'
-            }
-        }
-    }
+    // get X & O into array when clicked
+
 }
 
 
@@ -83,6 +76,7 @@ class View {
                 classes: 'col-4 border border-secondary p-5 text-center fs-1',
                 onclick: this.m.c.addClick.bind(this.m.c)
             });
+            this.m.tileArray.push(columnBoard)
             rowBoard.appendChild(columnBoard);
             container.appendChild(rowBoard);
             app.appendChild(container);
@@ -97,6 +91,13 @@ class View {
         resetDiv.appendChild(resetButton);
         app.appendChild(resetDiv);
 
+        let gameFinished = this.generateHTML({
+            type: 'h1',
+            classes: 'text-center',
+            id: 'hopefullyDone',
+            htmlText: '',
+        })
+        app.appendChild(gameFinished);
     }
     generateHTML({ type, classes = '', id = '', htmlText = '', onclick = '' }) {
         let element = document.createElement(type);
@@ -110,6 +111,7 @@ class View {
 
 }
 
+//console.log(app.childNodes.length)
 
 //---------Controller----------//
 
@@ -117,60 +119,107 @@ class Controller {
     constructor(view, model) {
         this.v = view;
         this.m = model;
+
     }
     init() {
         this.v.generateHTML()
+        //console.log(app.childNodes.length)
     }
 
-    /* notClicked(e){
-        if (e.target.id === true && this.m.gameOver === true)
-    } */
+    checkWin() { //need to solve this
+        for (let index = 0; index < this.m.wins.length; index++) {
+            let currentWinCondition = this.m.wins[index];
+            // console.log(currentWinCondition)
+            let winOne = currentWinCondition[0];
+            let winTwo = currentWinCondition[1];
+            let winThree = currentWinCondition[2];
+            // console.log(this.m.tileArray)
+
+            // console.log(this.m.tileArray[winOne].textContent)
+
+            let gameFinished = document.getElementById('hopefullyDone');
+
+            if (this.m.tileArray[winOne].textContent == 'X'
+                && this.m.tileArray[winTwo].textContent == 'X'
+                && this.m.tileArray[winThree].textContent == 'X') {
+                this.gameOver = true
+                gameFinished.innerText = 'X wins'
+                console.log('x won')
+            }
+            if (this.m.tileArray[winOne].textContent == 'O'
+                && this.m.tileArray[winTwo].textContent == 'O'
+                && this.m.tileArray[winThree].textContent == 'O') {
+                this.gameOver = true
+                gameFinished.innerText = 'O wins'
+                console.log('o won')
+            }
+
+            if (this.m.beenClicked == 9 && this.m.gameOver == false) {
+                this.m.gameOver = true
+            gameFinished.innerText = 'TIE'
+            }
+        }
+
+    }
+
+
     // if it has been clicked
     // if game hasnt been over
 
     addClick(e) {
-        console.log(e.target.id)
+        // console.log(this.m.beenClicked)
         let player;
-        if (this.m.turn % 2 == 0) {
-            console.log('x clicked')
-            e.target.innerText = "X";
-            player = 'X';
-        } else {
-            e.target.innerText = "O";
-            console.log('o clicked')
-            player = 'O';
+        if (e.target.innerText == "") {
+            if (!this.m.gameOver) {
+                //if tiled has been clicked or not
+                if (this.m.beenClicked % 2 == 0) {
+                    // console.log('x clicked')
+                    e.target.innerText = "X";
+                    player = this.m.firstPlayer;
+                } else {
+                    e.target.innerText = "O";
+                    //console.log('o clicked')
+                    player = this.m.secondPlayer;
+                }
 
+                this.m.beenClicked++;
+                // console.log(e);
+                // console.log('clicked on', e.target.id)
+                //was clicked=true
+                if (this.m.beenClicked > 4) {
+                    this.checkWin();
+                }
+                this.playerTurn(player);
+
+            }
         }
-        this.m.turn++;
-        console.log(e);
-        console.log('clicked on', e.target.id)
-        //was clicked=true
-        //this.m.winConditions();
-        this.playerTurn(player);
     }
 
     playerTurn(player) { // need to solve this
         let playerTurn = document.getElementById('playerTurn');
         let firstPlayer = "X's Turn";
         let secondPlayer = "O's Turn";
-        if (player == 'X') {
+        if (player == this.m.firstPlayer && this.m.beenClicked % 2 == 0) {
             playerTurn.innerText = secondPlayer;
         }
-        else if (player == 'O') {
+        if (this.m.beenClicked === 9) {
+            playerTurn.innerText = "Game Over, Reset Game";
+        }
+        else {
             playerTurn.innerText = firstPlayer;
         }
-        /* else (this.m.beenClicked > 8) {
-            playerTurn.innerText = "Game Over"
-        } */
+
     }
     resetGame() {
+        let app = document.getElementById('app');
+        app.innerText = "";
         //init(); // need to fix this
-        this.init;
-        this.v.generateHTML(htmlText = '');
-        console.log('reseting game')
+        this.v.init();
+        //this.playerTurn();
+        // console.log('reseting game')
     }
 }
-//resetButton.addEventListener('click', view.init()) & model.init();
+
 
 //---------------App---------------//
 
@@ -184,10 +233,11 @@ class App {
     }
 
     init() {
-        console.log("starting the app");
+        // console.log("starting the app");
         this.m.init();
         this.v.init();
         this.c.init(); // figure out why this clears out
+        this.m.beenClicked = 0;// this needs checked
 
     }
 }
@@ -196,5 +246,5 @@ function init() {
     // 1 - page loads, run init on the app
     let a = new App();
     a.init();
-    console.log(a);
+    //console.log(a);
 }
