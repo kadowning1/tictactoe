@@ -26,7 +26,7 @@ class Model {
         this.c = controller;
     }
     init() {
-        console.log("Model.init()")
+        //console.log("Model.init()")
         this.beenClicked = 0;
         this.gameOver = false;
         this.tileArray = [];
@@ -52,10 +52,10 @@ class View {
     }
     init() {
         const app = document.getElementById('app');
-        console.log(app)
+        //console.log(app)
 
         let headingTwo = this.generateHTML({ type: 'h2', classes: "text-center", htmlText: 'Tic-Tac-Toe' });
-        console.log(headingTwo);
+        //console.log(headingTwo);
         let headingFour = this.generateHTML({ type: 'h4', classes: 'text-center', id: "playerTurn", htmlText: 'Player X Turn' })
 
         app.appendChild(headingTwo);
@@ -117,7 +117,7 @@ class Controller {
 
     }
     init() {
-        this.v.generateHTML()
+        //this.v.generateHTML()
         //console.log(app.childNodes.length)
     }
 
@@ -137,21 +137,21 @@ class Controller {
             if (this.m.tileArray[winOne].textContent == 'X'
                 && this.m.tileArray[winTwo].textContent == 'X'
                 && this.m.tileArray[winThree].textContent == 'X') {
-                this.gameOver = true
+                this.m.gameOver = true
                 gameFinished.innerText = 'X wins'
-                console.log('x won')
+                //console.log('x won')
             }
             if (this.m.tileArray[winOne].textContent == 'O'
                 && this.m.tileArray[winTwo].textContent == 'O'
                 && this.m.tileArray[winThree].textContent == 'O') {
-                this.gameOver = true
+                this.m.gameOver = true
                 gameFinished.innerText = 'O wins'
-                console.log('o won')
+                //console.log('o won')
             }
 
             if (this.m.beenClicked == 9 && this.m.gameOver == false) {
                 this.m.gameOver = true
-            gameFinished.innerText = 'TIE'
+                gameFinished.innerText = 'TIE'
             }
         }
 
@@ -162,42 +162,44 @@ class Controller {
     // if game hasnt been over
 
     addClick(e) {
-        // console.log(this.m.beenClicked)
-        let player;
-        if (e.target.innerText == "") {
-            if (!this.m.gameOver) {
-                //if tiled has been clicked or not
-                if (this.m.beenClicked % 2 == 0) {
-                    // console.log('x clicked')
-                    e.target.innerText = "X";
-                    player = this.m.firstPlayer;
-                } else {
-                    e.target.innerText = "O";
-                    //console.log('o clicked')
-                    player = this.m.secondPlayer;
-                }
+        //console.log(this.m.gameOver)
+        if (!this.m.gameOver) {
+            let player;
+            if (e.target.innerText == "") {
+                if (!this.m.gameOver) {
+                    //if tiled has been clicked or not
+                    if (this.m.beenClicked % 2 == 0) {
+                        // console.log('x clicked')
+                        e.target.innerText = "X";
+                        player = this.m.firstPlayer;
+                    } else {
+                        e.target.innerText = "O";
+                        //console.log('o clicked')
+                        player = this.m.secondPlayer;
+                    }
 
-                this.m.beenClicked++;
-                // console.log(e);
-                // console.log('clicked on', e.target.id)
-                //was clicked=true
-                if (this.m.beenClicked > 4) {
-                    this.checkWin();
-                }
-                this.playerTurn(player);
+                    this.m.beenClicked++;
+                    // console.log(e);
+                    // console.log('clicked on', e.target.id)
+                    //was clicked=true
+                    if (this.m.beenClicked > 4) {
+                        this.checkWin();
+                    }
+                    this.playerTurn(player);
 
+                }
             }
         }
     }
 
-    playerTurn(player) { // need to solve this
+    playerTurn() { // need to solve this
         let playerTurn = document.getElementById('playerTurn');
         //firstPlayer = "X's Turn";
-        console.log(player);
+        //console.log(player);
         //let secondPlayer = "O's Turn";
         if (this.m.beenClicked % 2 == 0) {
             playerTurn.innerText = "X's Turn";
-            console.log(secondPlayer);
+            //console.log(secondPlayer);
         }
         else if (this.m.beenClicked === 9) {
             playerTurn.innerText = "Game Over, Reset Game";
@@ -213,7 +215,7 @@ class Controller {
         //init(); // need to fix this
         this.m.init();
         this.v.init();
-        this.c.init();
+        //this.c.init();
         //this.playerTurn();
         // console.log('reseting game')
     }
@@ -235,7 +237,7 @@ class App {
         // console.log("starting the app");
         this.m.init();
         this.v.init();
-        this.c.init(); // figure out why this clears out
+        //this.c.init(); // figure out why this clears out
         this.m.beenClicked = 0;// this needs checked
 
     }
