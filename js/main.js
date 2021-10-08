@@ -1,11 +1,7 @@
 // todo: friday
 
-//work on display
-//text at top is not flipping
-//beenClicked is not reseting after game is complete or reset button is clicks
+//playerTurn at top is not flipping
 //game can be won at 9 clicks and not a tie
-
-
 
 //---------Model----------//
 //create Model
@@ -14,8 +10,6 @@ class Model {
         this.beenClicked = 0;
         this.gameOver = false; // possible switch to true so switched to false after first click
         this.tileArray = [];
-        this.firstPlayer = 'X';
-        this.secondPlayer = 'O';
         this.c = null;
         this.wins = [
             [0, 1, 2],
@@ -35,6 +29,7 @@ class Model {
         console.log("Model.init()")
         this.beenClicked = 0;
         this.gameOver = false;
+        this.tileArray = [];
     }
 
     // get X & O into array when clicked
@@ -197,16 +192,18 @@ class Controller {
 
     playerTurn(player) { // need to solve this
         let playerTurn = document.getElementById('playerTurn');
-        let firstPlayer = "X's Turn";
-        let secondPlayer = "O's Turn";
-        if (player == this.m.firstPlayer && this.m.beenClicked % 2 == 0) {
-            playerTurn.innerText = secondPlayer;
+        //firstPlayer = "X's Turn";
+        console.log(player);
+        //let secondPlayer = "O's Turn";
+        if (this.m.beenClicked % 2 == 0) {
+            playerTurn.innerText = "X's Turn";
+            console.log(secondPlayer);
         }
-        if (this.m.beenClicked === 9) {
+        else if (this.m.beenClicked === 9) {
             playerTurn.innerText = "Game Over, Reset Game";
         }
         else {
-            playerTurn.innerText = firstPlayer;
+            playerTurn.innerText = "O's Turn";
         }
 
     }
@@ -214,7 +211,9 @@ class Controller {
         let app = document.getElementById('app');
         app.innerText = "";
         //init(); // need to fix this
+        this.m.init();
         this.v.init();
+        this.c.init();
         //this.playerTurn();
         // console.log('reseting game')
     }
